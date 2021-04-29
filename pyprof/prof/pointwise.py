@@ -144,19 +144,22 @@ class Pointwise(OperatorLayerBase):
         b = f = 0
 
         # Unary
-        if self.op() in Pointwise.unary + Pointwise.representation:
+        if len(self.input) == 1 and \
+           self.op() in Pointwise.unary + Pointwise.representation:
             assert (len(self.input) == 1)
             b = 2 * self.input[0].bytes
             f = self.input[0].size
 
-        elif self.op() in Pointwise.exp_log + Pointwise.trig_trans + \
+        elif len(self.input) == 1 and \
+             self.op() in Pointwise.exp_log + Pointwise.trig_trans + \
                 Pointwise.sqrt + Pointwise.error:
             assert (len(self.input) == 1)
             b = 2 * self.input[0].bytes
             f = self.input[0].size * 20 # estimate
 
         # Binary
-        elif self.op() in Pointwise.comp + \
+        elif len(self.input) == 2 and \
+             self.op() in Pointwise.comp + \
                 Pointwise.binary + Pointwise.ibinary + \
                 Pointwise.logical + Pointwise.ilogical:
 
@@ -200,7 +203,7 @@ class Pointwise(OperatorLayerBase):
 
         else:
             e = f'{self.op()} not supported yet. Please file a bug.'
-            assert False, e
+            #assert False, e
 
         return b, f
 
